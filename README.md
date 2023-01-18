@@ -11,6 +11,10 @@ motoman_driver should have correct CMakeLists.txt and package,
 but it definitely is missing dependancies at present, plus will
 most likely need code changes for ROS2
 
+## Needs:
+
+robot_state_publisher (ros distro has it, but not properly)
+
 ## Building
 
 A reminder to those new to ROS2, for steps to theoretically compile.
@@ -22,5 +26,11 @@ A reminder to those new to ROS2, for steps to theoretically compile.
     (maybe someday we'll support rosdep)
 4. cd ~/ros
 5. colcon build
+
+To build ONE specific package, ignoring others, use
+
+colcon build --packages-select NAMEHERE
+
+Only run colcon at the ~/ros level
 
 
