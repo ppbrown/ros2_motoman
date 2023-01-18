@@ -1,3 +1,3 @@
-Header header
+std_msgs/Header header
 int16 num_groups
 DynamicJointState[] joint_feedbacks

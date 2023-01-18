@@ -16,19 +16,19 @@ set(msg_files
     "msg/DynamicJointState.msg"
     "msg/DynamicJointTrajectory.msg"
     "msg/DynamicJointTrajectoryFeedback.msg"
-    "msg/MotorosError.msg"
-    "msg/PointStreamFailure.msg"
+    #    "msg/MotorosError.msg"
+    #    "msg/PointStreamFailure.msg"
 )
 
 set(srv_files
     "srv/CmdJointTrajectoryEx.srv"
     "srv/ReadSingleIO.srv"
     "srv/WriteSingleIO.srv"
-    #    "srv/ReadMRegister.srv"
-    #    "srv/ReadGroupIO.srv"
-    #    "srv/SelectTool.srv"
-    #    "srv/WriteMRegister.srv"
-    #    "srv/WriteGroupIO.srv"
+    "srv/ReadMRegister.srv"
+    "srv/ReadGroupIO.srv"
+    "srv/SelectTool.srv"
+    "srv/WriteMRegister.srv"
+    "srv/WriteGroupIO.srv"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}

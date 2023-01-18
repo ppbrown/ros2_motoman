@@ -4,6 +4,6 @@
 #num_groups: # of motion groups included in this message
 #group[]: DynamicJointPoint from DynamicJointPoint.msg
 
-Header header
+std_msgs/Header header
 string[] joint_names
 DynamicJointPoint[] points
