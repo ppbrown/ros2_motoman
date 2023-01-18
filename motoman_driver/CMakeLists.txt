@@ -1,30 +1,26 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.5)
 project(motoman_driver)
 
 # require C++11
-set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Load catkin and all dependencies required for this package
-find_package(
-  catkin
-  REQUIRED COMPONENTS
-    actionlib
-    actionlib_msgs
-    control_msgs
-    industrial_msgs
-    industrial_robot_client
-    industrial_utils
-    motoman_msgs
-    roscpp
-    sensor_msgs
-    simple_message
-    std_msgs
-    std_srvs
-    trajectory_msgs
-    urdf
-)
+find_package( ament_cmake REQUIRED)
+find_package( actionlib_msgs REQUIRED)
+#find_package( control_msgs REQUIRED)
+find_package( industrial_msgs REQUIRED)
+find_package( industrial_robot_client REQUIRED)
+find_package( industrial_utils REQUIRED)
+find_package( motoman_msgs REQUIRED)
+find_package( rclcpp REQUIRED)
+find_package( sensor_msgs REQUIRED)
+find_package( simple_message REQUIRED)
+find_package( std_msgs REQUIRED)
+find_package( std_srvs REQUIRED)
+find_package( trajectory_msgs REQUIRED)
+find_package( urdf REQUIRED)
 
 find_package(Boost REQUIRED COMPONENTS system thread)
 
@@ -34,63 +30,25 @@ find_package(Boost REQUIRED COMPONENTS system thread)
 include_directories(
   include
   ${Boost_INCLUDE_DIRS}
-  ${catkin_INCLUDE_DIRS})
+  )
 
 add_definitions(-DLINUXSOCKETS=1)  #use linux sockets for communication
 add_definitions(-DROS=1)
-
-catkin_package(
-  CATKIN_DEPENDS
-    actionlib
-    actionlib_msgs
-    control_msgs
-    industrial_msgs
-    industrial_robot_client
-    industrial_utils
-    motoman_msgs
-    roscpp
-    sensor_msgs
-    simple_message
-    std_msgs
-    std_srvs
-    trajectory_msgs
-    urdf
-  INCLUDE_DIRS
-    include
-)
 
 
 set(MSG_SRC_FILES
   src/simple_message/messages/motoman_motion_ctrl_message.cpp
   src/simple_message/messages/motoman_motion_reply_message.cpp
-  src/simple_message/messages/motoman_read_mregister_message.cpp
-  src/simple_message/messages/motoman_read_mregister_reply_message.cpp
   src/simple_message/messages/motoman_read_single_io_message.cpp
   src/simple_message/messages/motoman_read_single_io_reply_message.cpp
-  src/simple_message/messages/motoman_read_group_io_message.cpp
-  src/simple_message/messages/motoman_read_group_io_reply_message.cpp
-  src/simple_message/messages/motoman_select_tool_message.cpp
-  src/simple_message/messages/motoman_write_mregister_message.cpp
-  src/simple_message/messages/motoman_write_mregister_reply_message.cpp
   src/simple_message/messages/motoman_write_single_io_message.cpp
   src/simple_message/messages/motoman_write_single_io_reply_message.cpp
-  src/simple_message/messages/motoman_write_group_io_message.cpp
-  src/simple_message/messages/motoman_write_group_io_reply_message.cpp
   src/simple_message/motoman_motion_ctrl.cpp
   src/simple_message/motoman_motion_reply.cpp
-  src/simple_message/motoman_read_mregister.cpp
-  src/simple_message/motoman_read_mregister_reply.cpp
   src/simple_message/motoman_read_single_io.cpp
   src/simple_message/motoman_read_single_io_reply.cpp
-  src/simple_message/motoman_read_group_io.cpp
-  src/simple_message/motoman_read_group_io_reply.cpp
-  src/simple_message/motoman_select_tool.cpp
-  src/simple_message/motoman_write_mregister.cpp
-  src/simple_message/motoman_write_mregister_reply.cpp
   src/simple_message/motoman_write_single_io.cpp
   src/simple_message/motoman_write_single_io_reply.cpp
-  src/simple_message/motoman_write_group_io.cpp
-  src/simple_message/motoman_write_group_io_reply.cpp
 )
 
 set(CLIENT_SRC_FILES
@@ -125,7 +83,6 @@ add_library(motoman_industrial_robot_client ${CLIENT_SRC_FILES})
 target_link_libraries(motoman_industrial_robot_client
   industrial_robot_client
   industrial_utils)
-add_dependencies(motoman_industrial_robot_client ${catkin_EXPORTED_TARGETS})
 target_compile_definitions(motoman_industrial_robot_client PUBLIC ${industrial_robot_client_DEFINITIONS})
 
 # Robot state node
@@ -134,7 +91,7 @@ add_executable(motoman_robot_state
 target_link_libraries(motoman_robot_state
   motoman_simple_message
   motoman_industrial_robot_client
-  ${catkin_LIBRARIES})
+  )
 set_target_properties(motoman_robot_state
   PROPERTIES OUTPUT_NAME robot_state
   PREFIX "")
@@ -148,7 +105,7 @@ add_executable(motoman_motion_streaming_interface
 target_link_libraries(motoman_motion_streaming_interface
   motoman_simple_message
   motoman_industrial_robot_client
-  ${catkin_LIBRARIES})
+  })
 set_target_properties(motoman_motion_streaming_interface
   PROPERTIES OUTPUT_NAME motion_streaming_interface
   PREFIX "")
@@ -161,7 +118,7 @@ add_executable(motoman_io_relay
 target_link_libraries(motoman_io_relay
   motoman_simple_message
   motoman_industrial_robot_client
-  ${catkin_LIBRARIES})
+  )
 set_target_properties(motoman_io_relay
   PROPERTIES OUTPUT_NAME io_relay
   PREFIX "")
@@ -181,7 +138,6 @@ set_target_properties(motoman_industrial_robot_client_bswap PROPERTIES COMPILE_D
 target_link_libraries(motoman_industrial_robot_client_bswap
   industrial_robot_client_bswap
   industrial_utils)
-add_dependencies(motoman_industrial_robot_client_bswap ${catkin_EXPORTED_TARGETS})
 target_compile_definitions(motoman_industrial_robot_client_bswap PUBLIC ${industrial_robot_client_bswap_DEFINITIONS})
 
 # Robot state node
@@ -190,7 +146,7 @@ add_executable(motoman_robot_state_bswap
 target_link_libraries(motoman_robot_state_bswap
   motoman_simple_message_bswap
   motoman_industrial_robot_client_bswap
-  ${catkin_LIBRARIES})
+  )
 set_target_properties(motoman_robot_state_bswap
   PROPERTIES OUTPUT_NAME robot_state_bswap
   PREFIX "")
@@ -204,7 +160,7 @@ add_executable(motoman_motion_streaming_interface_bswap
 target_link_libraries(motoman_motion_streaming_interface_bswap
   motoman_simple_message_bswap
   motoman_industrial_robot_client_bswap
-  ${catkin_LIBRARIES})
+  )
 set_target_properties(motoman_motion_streaming_interface_bswap
   PROPERTIES OUTPUT_NAME motion_streaming_interface_bswap
   PREFIX "")
@@ -217,7 +173,7 @@ add_executable(motoman_io_relay_bswap
 target_link_libraries(motoman_io_relay_bswap
   motoman_simple_message_bswap
   motoman_industrial_robot_client_bswap
-  ${catkin_LIBRARIES})
+  )
 set_target_properties(motoman_io_relay_bswap
   PROPERTIES OUTPUT_NAME io_relay_bswap
   PREFIX "")
@@ -229,7 +185,7 @@ add_executable(${PROJECT_NAME}_joint_trajectory_action
 target_link_libraries(${PROJECT_NAME}_joint_trajectory_action
   industrial_robot_client
   motoman_industrial_robot_client
-  ${catkin_LIBRARIES})
+  )
 
 
 #############
@@ -246,7 +202,7 @@ install(TARGETS
   motoman_robot_state
   motoman_robot_state_bswap
 
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 # libraries
@@ -256,12 +212,12 @@ install(TARGETS
   motoman_simple_message
   motoman_simple_message_bswap
 
-  DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  DESTINATION lib
 )
 
 # headers
 install(DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  DESTINATION include/${PROJECT_NAME}
 )
 
 # other files
@@ -269,23 +225,25 @@ install(DIRECTORY
     Inform
     launch
     MotoPlus
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-
+  DESTINATION share/${PROJECT_NAME}
+)
 
 #############
 ## Testing ##
 #############
 
-if(CATKIN_ENABLE_TESTING)
-  find_package(roslint REQUIRED)
+## if(CATKIN_ENABLE_TESTING)
+##   find_package(roslint REQUIRED)
   # gather files, ignoring MotoPlus (we can't use '--exclude' (not supported
   # by roslint's version ofcpplint) and we don't want to add a CPPLINT.cfg
   # file to MotoPlus)
-  file(GLOB_RECURSE files_to_cpplint RELATIVE ${CMAKE_CURRENT_LIST_DIR} "*.cpp" "*.h")
-  string(REGEX REPLACE "MotoPlus/[^;]+;?" "" files_to_cpplint "${files_to_cpplint}")
-  roslint_cpp(${files_to_cpplint})
-  roslint_add_test()
+  ##   file(GLOB_RECURSE files_to_cpplint RELATIVE ${CMAKE_CURRENT_LIST_DIR} "*.cpp" "*.h")
+  ##   string(REGEX REPLACE "MotoPlus/[^;]+;?" "" files_to_cpplint "${files_to_cpplint}")
+  ##   roslint_cpp(${files_to_cpplint})
+  ##   roslint_add_test()
 
-  find_package(roslaunch REQUIRED)
-  roslaunch_add_file_check(tests/roslaunch_test_io_relay.xml)
-endif()
+  ##   find_package(roslaunch REQUIRED)
+  ##   roslaunch_add_file_check(tests/roslaunch_test_io_relay.xml)
+  ## endif()
+
+ament_package()
